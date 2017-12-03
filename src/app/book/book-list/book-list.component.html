@@ -1,0 +1,72 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+      <h2>{{title}}</h2>
+  </div>
+  <div class="panel-body">
+      <div class='row'>
+          <div class='col-md-2'>Filter by:</div>
+          <div class='col-md-4'>
+              <input type='text' [(ngModel)]='filterValue' />
+          </div>
+      </div>
+      <div class='row'>
+          <div class='col-md-6'>
+              <h3>Filtered by: {{filterValue}} </h3>
+          </div>
+      </div>
+      <hr class="my-4">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped" *ngIf='books && books.length'>
+        <thead>
+          <tr>
+            <th>
+              <button class="btn btn-primary" (click)="ToggleImage()">{{showImage ? 'Hide' : 'Show'}} Image</button>
+            </th>
+            <th>Code</th>
+            <th>Book Name</th>
+            <th>Publisher</th>
+            <th>Price</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of books | bookFilter : filterValue">
+            <td>
+              <img class="img-responsive img-rounded" 
+                    [src]="'/../../assets/images/book/'+book.imagepath"
+                    *ngIf="showImage" 
+                    width="100px" 
+                    height="150px"/></td>
+            <td>{{book.code}}</td>
+            <td>{{book.name}}</td>
+            <td>{{book.publisher}}</td>
+            <td>{{book.price | currency:'INR':true }}</td>
+            <td><button (click)="UpdateBook(book)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button></td>
+            <td><button (click)="DeleteBook(book)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="7">
+                <button class="btn btn-primary" (click)="AddBook()">Add New Book</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+<popup #deletepopup (confirmClick)="ConfirmDelete()">
+    Are you sure you want to delete this record?
+    <br>
+    <br>
+</popup>
+<popup #updatepopup (confirmClick)="ConfirmUpdate()">
+    <app-book *ngIf="updatebook" [book]="updatebook"></app-book>
+</popup>
+<popup #addpopup (confirmClick)="ConfirmAdd()">
+    <app-book *ngIf="addbook" [book]="addbook"></app-book>
+</popup>
+
+
